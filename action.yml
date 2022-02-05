@@ -1,14 +1,16 @@
 name: Extract issue number
 description: Extract issue number from the branch name of a PR merge commit
+inputs:
+  commit-message:
+    description: "commit message to parse"
 outputs:
   issue-number:
     description: 'issue number extracted'
 runs:
   using: 'composite'
   steps:
-    env:
-      MESSAGE: ${{ github.event.commits[0].message }}
     run:  |
-     export ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"`
-     echo "::set-output name=issue-number::${ISSUE_NUM}"
+      export MESSAGE=${{ inputs.commit-message }}
+      export ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"`
+      echo "::set-output name=issue-number::${ISSUE_NUM}"
 
