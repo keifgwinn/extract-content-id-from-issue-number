@@ -6,14 +6,14 @@ inputs:
 outputs:
   issue-number:
     description: 'issue number extracted'
+    value: ${{ steps.parse.outputs.issue-number }}
 runs:
   using: 'composite'
   steps:
     - run:  |
         export MESSAGE="${{ inputs.commit-message }}"
         export ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"`
-        echo $MESSAGE
-        echo $ISSUE_NUM
         echo "::set-output name=issue-number::${ISSUE_NUM}"
       shell: bash
+      id: parse
 
