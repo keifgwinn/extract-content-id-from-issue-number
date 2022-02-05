@@ -9,8 +9,5 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    run:  |
-      export MESSAGE=${{ inputs.commit-message }}
-      export ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"`
-      echo "::set-output name=issue-number::${ISSUE_NUM}"
+    run: MESSAGE=${{ inputs.commit-message }} ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"` echo "::set-output name=issue-number::${ISSUE_NUM}"
 
