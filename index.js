@@ -12,7 +12,7 @@ const extractInputs = () => {
 	return { pr };
 };
 
-const getPR = () => async (prNum) => {
+const getPR = async (prNum) => {
 	try {
 		const payload = {
 			owner: github.context.payload.repository.owner.name,
@@ -24,6 +24,7 @@ const getPR = () => async (prNum) => {
 			octokit.rest.pulls.checkIfMerged(payload),
 			octokit.rest.pulls.get(payload),
 		]);
+		console.log('returning', content);
 		return content;
 	} catch ({ message }) {
 		throw new Error(`Failed to find PR: ${message}`);
