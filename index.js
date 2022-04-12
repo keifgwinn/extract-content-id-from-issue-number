@@ -24,8 +24,7 @@ const getPR = () => async (prNum) => {
 			octokit.rest.pulls.checkIfMerged(payload),
 			octokit.rest.pulls.get(payload),
 		]);
-
-		console.log(isMerged, prData.base, prData.head);
+		return { isMerged, prData };
 	} catch ({ message }) {
 		throw new Error(`Failed to find PR: ${message}`);
 	}
@@ -33,7 +32,10 @@ const getPR = () => async (prNum) => {
 
 const run = async () => {
 	const { pr } = extractInputs();
-	const prData = await getPR(pr);
+	const { isMerged, prData } = await getPR(pr);
+
+	console.log(isMerged);
+	console.log(prData.base);
 };
 run().catch((err) => {
 	core.setFailed(err.message);
