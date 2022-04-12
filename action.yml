@@ -1,8 +1,13 @@
 name: Extract issue number
-description: Extract issue number from the branch name of a PR merge commit
+description: Extract issue number from the branch name of a PR
 inputs:
   pr:
-    description: "commit message to parse"
+    description: "PR number"
+    required: true
+  github-token:
+    description: 'access token to do github requests'
+    required: true
+
 outputs:
   issue-number:
     description: 'issue number extracted'
