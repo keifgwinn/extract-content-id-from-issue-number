@@ -20,11 +20,11 @@ const getPR = () => async (prNum) => {
 			pull_number: prNum,
 
 		};
-		const [isMerged, prData] = await Promise.all([
+		const content = await Promise.all([
 			octokit.rest.pulls.checkIfMerged(payload),
 			octokit.rest.pulls.get(payload),
 		]);
-		return { isMerged, prData };
+		return content;
 	} catch ({ message }) {
 		throw new Error(`Failed to find PR: ${message}`);
 	}
