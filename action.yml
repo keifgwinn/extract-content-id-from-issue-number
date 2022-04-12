@@ -1,21 +1,13 @@
 name: Extract issue number
 description: Extract issue number from the branch name of a PR merge commit
 inputs:
-  commit-message:
+  pr:
     description: "commit message to parse"
 outputs:
   issue-number:
     description: 'issue number extracted'
     value: ${{ steps.parse.outputs.issue-number }}
 runs:
-  using: 'composite'
-  steps:
-    - run:  |
-        export MESSAGE="${{ inputs.commit-message }}"
-        export ISSUE_NUM=`echo $MESSAGE | sed -n "s/^Merge pull request \#[0-9]*.*ISSUE_\([0-9]*\).*$/\1/p"`
-        echo $MESSAGE
-        echo $ISSUE_NUM
-        echo "::set-output name=issue-number::${ISSUE_NUM}"
-      shell: bash
-      id: parse
+  using: 'node16'
+  main: 'dist/index.js'
 
