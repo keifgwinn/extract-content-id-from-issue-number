@@ -8501,9 +8501,11 @@ const getPR = () => async (prNum) => {
 };
 
 const run = async () => {
+	console.log('Extracting inputs');
 	const { pr } = extractInputs();
+	console.log('Get PR');
 	const { isMerged, prData } = await getPR(pr);
-
+	console.log('got PR');
 	console.log(isMerged);
 	console.log(prData.base);
 };
