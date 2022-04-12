@@ -8490,6 +8490,8 @@ const getPR = async (prNum) => {
 			pull_number: prNum,
 
 		};
+
+		console.log('PR num is ', prNum);
 		const content = await Promise.all([
 			octokit.rest.pulls.checkIfMerged(payload),
 			octokit.rest.pulls.get(payload),
