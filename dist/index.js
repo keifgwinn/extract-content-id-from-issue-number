@@ -8510,7 +8510,13 @@ const run = async () => {
 
 	const [merged, prData] = await getPR(pr);
 
-	console.log(prData.data.head, prData.data.base);
+	if (merged && prData.data.base.ref === 'staging') {
+		const match = prData.data.head.match(/ISSUE_(\d+)/i);
+		if (match.length > 1) {
+			const issueNum = match[1];
+			core.setOutput('issue-number', issueNum);
+		}
+	}
 };
 run().catch((err) => {
 	core.setFailed(err.message);
