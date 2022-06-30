@@ -14,15 +14,15 @@ const extractInputs = () => {
 
 const getPR = async (prNum) => {
 	try {
+		const { owner } = github.context.payload.repository;
 		const payload = {
-			owner: github.context.payload.repository.owner.name || github.context.payload.repository.owner.login,
+			owner: owner.name ?? owner.login,
 			repo: github.context.payload.repository.name,
 			pull_number: prNum,
 
 		};
 
 		console.log(payload);
-		console.log(github.context.payload);
 
 		console.log('!!!PR num is ', prNum);
 		const content = await Promise.all([
