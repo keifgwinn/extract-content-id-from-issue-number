@@ -8492,7 +8492,7 @@ const getPR = async (prNum) => {
 		};
 
 		console.log(payload);
-		console.log(github.context.payload.repository);
+		console.log(github.context.payload);
 
 		console.log('!!!PR num is ', prNum);
 		const content = await Promise.all([
