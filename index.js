@@ -15,7 +15,7 @@ const extractInputs = () => {
 const getPR = async (prNum) => {
 	try {
 		const payload = {
-			owner: github.context.payload.repository.owner.name,
+			owner: github.context.payload.repository.owner.name || github.context.payload.repository.owner.login,
 			repo: github.context.payload.repository.name,
 			pull_number: prNum,
 
