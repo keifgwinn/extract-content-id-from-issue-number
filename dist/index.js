@@ -8474,7 +8474,7 @@ const github = __nccwpck_require__(5438);
 let octokit;
 
 const extractInputs = () => {
-	const pr = 15; // parseInt(core.getInput('pr'), 10);
+	const pr = parseInt(core.getInput('pr'), 10);
 
 	const token = core.getInput('github-token');
 	octokit = github.getOctokit(token);
