@@ -8511,11 +8511,15 @@ const run = async () => {
 	const [merged, prData] = await getPR(pr);
 
 	if (merged && prData.data.base.ref === 'staging') {
-		const match = prData.data.head.match(/ISSUE_(\d+)/i);
+		const match = prData.data.head.ref.match(/ISSUE_(\d+)/i);
 		if (match.length > 1) {
 			const issueNum = match[1];
 			core.setOutput('issue-number', issueNum);
+		} else {
+			console.log(`could not extract issue number from ${prData.data.head.ref}`);
 		}
+	} else {
+		console.log(`${merged ? 'PR not merged' : 'base is not staging'}. No action needed`);
 	}
 };
 run().catch((err) => {
