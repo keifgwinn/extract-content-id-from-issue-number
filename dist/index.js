@@ -8492,14 +8492,10 @@ const getPR = async (prNum) => {
 
 		};
 
-		console.log(payload);
-
-		console.log('!!!PR num is ', prNum);
 		const content = await Promise.all([
 			octokit.rest.pulls.checkIfMerged(payload).then(() => true).catch(() => false),
 			octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}?state=all', payload),
 		]);
-		console.log('returning', content);
 		return content;
 	} catch ({ message }) {
 		throw new Error(`Failed to find PR: ${message}`);
@@ -8507,11 +8503,14 @@ const getPR = async (prNum) => {
 };
 
 const run = async () => {
-	console.log('Extracting inputs?');
 	const { pr } = extractInputs();
-	console.log('Get PR');
-	const res = await getPR(pr);
-	console.log('got PR', res);
+	if (!pr) {
+		throw new Error('PR number not provided');
+	}
+
+	const [merged, prData] = await getPR(pr);
+
+	console.log(prData.data.head, prData.data.base);
 };
 run().catch((err) => {
 	core.setFailed(err.message);
