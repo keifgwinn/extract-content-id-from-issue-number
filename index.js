@@ -5,11 +5,12 @@ let octokit;
 
 const extractInputs = () => {
 	const pr = parseInt(core.getInput('pr'), 10);
+	const base = core.getInput('base');
 
 	const token = core.getInput('github-token');
 	octokit = github.getOctokit(token);
 
-	return { pr };
+	return { pr, base };
 };
 
 const getPR = async (prNum) => {
@@ -33,14 +34,14 @@ const getPR = async (prNum) => {
 };
 
 const run = async () => {
-	const { pr } = extractInputs();
+	const { pr, base } = extractInputs();
 	if (!pr) {
 		throw new Error('PR number not provided');
 	}
 
 	const [merged, prData] = await getPR(pr);
 
-	if (merged && prData.data.base.ref === 'master') {
+	if (merged && prData.data.base.ref === base) {
 		const match = prData.data.head.ref.match(/ISSUE_(\d+)/i);
 		if (match.length > 1) {
 			const issueNum = match[1];
@@ -49,7 +50,7 @@ const run = async () => {
 			console.log(`could not extract issue number from ${prData.data.head.ref}`);
 		}
 	} else {
-		console.log(`${!merged ? 'PR not merged' : 'base is not staging'}. No action needed`);
+		console.log(`${!merged ? 'PR not merged' : `base is not ${base}`}. No action needed`);
 	}
 };
 run().catch((err) => {
