@@ -21,6 +21,8 @@ const getPR = async (prNum) => {
 
 		};
 
+		console.log('what is going on?!');
+
 		console.log('!!!PR num is ', prNum);
 		const content = await Promise.all([
 			//			octokit.rest.pulls.checkIfMerged(payload),
@@ -34,7 +36,7 @@ const getPR = async (prNum) => {
 };
 
 const run = async () => {
-	console.log('Extracting inputs');
+	console.log('Extracting inputs?');
 	const { pr } = extractInputs();
 	console.log('Get PR');
 	const res = await getPR(pr);
