@@ -1,6 +1,9 @@
 name: Extract issue number
 description: Extract issue number from the branch name of a PR
 inputs:
+  base:
+    description: "Base branch to expect PRs from"
+    required: true
   pr:
     description: "PR number"
     required: true
