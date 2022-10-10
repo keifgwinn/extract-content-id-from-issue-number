@@ -2,14 +2,14 @@ name: Extract content ID
 description: Extract content_id from issue
 inputs:
   issue-number:
-    description: "Issue number"
+    description: 'issue number to extract the content-id for'
     required: true
   github-token:
     description: 'access token to do github requests'
     required: true
 outputs:
   content-id:
-    description: 'issue content_id'
+    description: 'issue content-id'
     value: ${{ steps.parse.outputs.content-id }}
 runs:
   using: 'node16'
