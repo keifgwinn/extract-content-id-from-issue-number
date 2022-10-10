@@ -4,28 +4,27 @@ const github = require('@actions/github');
 let octokit;
 
 const extractInputs = () => {
-	const pr = parseInt(core.getInput('pr'), 10);
+	const issueNum = parseInt(core.getInput('issue-number'), 10);
 	const base = core.getInput('base');
 
 	const token = core.getInput('github-token');
 	octokit = github.getOctokit(token);
 
-	return { pr, base };
+	return { issueNum, base };
 };
 
-const getPR = async (prNum) => {
+const getIssue = async (issueNum) => {
 	try {
 		const { owner } = github.context.payload.repository;
 		const payload = {
 			owner: owner.name ?? owner.login,
 			repo: github.context.payload.repository.name,
-			pull_number: prNum,
-
+			issue_number: issueNum,
 		};
 
 		const content = await Promise.all([
 			octokit.rest.pulls.checkIfMerged(payload).then(() => true).catch(() => false),
-			octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}?state=all', payload),
+			octokit.request('GET /repos/{owner}/{repo}/issues/{issue_number}', payload),
 		]);
 		return content;
 	} catch ({ message }) {
@@ -34,23 +33,17 @@ const getPR = async (prNum) => {
 };
 
 const run = async () => {
-	const { pr, base } = extractInputs();
-	if (!pr) {
-		throw new Error('PR number not provided');
+	const { issueNum, base } = extractInputs();
+	if (!issueNum) {
+		throw new Error('Issue number not provided');
 	}
 
-	const [merged, prData] = await getPR(pr);
+	const [merged, issueData] = await getIssue(issueNum);
 
-	if (merged && prData.data.base.ref === base) {
-		const match = prData.data.head.ref.match(/ISSUE_(\d+)/i);
-		if (match.length > 1) {
-			const issueNum = match[1];
-			core.setOutput('issue-number', issueNum);
-		} else {
-			console.log(`could not extract issue number from ${prData.data.head.ref}`);
-		}
+	if ( issueData.node_id ) {
+		core.setOutput('content-id', issueData.node_id );
 	} else {
-		console.log(`${!merged ? 'PR not merged' : `base is not ${base}`}. No action needed`);
+		console.log(`${!issueData.node_id ? '' : `base is not ${base}`}. No action needed`);
 	}
 };
 run().catch((err) => {

@@ -1,6 +1,6 @@
 {
 
-  "name": "any-issue-labeller",
+  "name": "extract-content-id",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

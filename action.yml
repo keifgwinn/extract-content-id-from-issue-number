@@ -1,20 +1,16 @@
-name: Extract issue number
-description: Extract issue number from the branch name of a PR
+name: Extract content ID
+description: Extract content_id from issue
 inputs:
-  base:
-    description: "Base branch to expect PRs from"
-    required: true
-  pr:
-    description: "PR number"
+  issue-number:
+    description: "Issue number"
     required: true
   github-token:
     description: 'access token to do github requests'
     required: true
-
 outputs:
-  issue-number:
-    description: 'issue number extracted'
-    value: ${{ steps.parse.outputs.issue-number }}
+  content-id:
+    description: 'issue content_id'
+    value: ${{ steps.parse.outputs.content-id }}
 runs:
   using: 'node16'
   main: 'dist/index.js'

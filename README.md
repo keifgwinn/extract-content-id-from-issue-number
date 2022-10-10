@@ -1,15 +1,11 @@
-# Extract Issue number from PR merge commit
-A composition action to extract issue number from the branch name on a merge commit.
-
-This assumes branch is named in the format `ISSUE_<issue number>`
-
-so a a merge commit to merge ISSUE_123, `issue-number` will be 123.
+# Extract content ID from issue number
+An action to extract the content_id for github projects from an issue number
 
 ## Outputs
 
-### `issue-number`
+### `content-id`
 
-Issue number extracted
+node_id extracted
 
 
 ### Example Workflow
@@ -20,12 +16,12 @@ on:
       - master
 
 jobs:
-  getIssueNumber:
+  getContentID:
     runs-on: ubuntu-latest
     steps:
       - name: Parse commit message for issue number
-        uses: carmenfan/extract-issue-number-from-PR-merge@v1.0
+        uses: keifgwinn/extract-content-id-from-issue-number@v1.0
         with:
-          commit-message: ${{ github.event.commits[0].message }}
+          issue-number: ${{ github.event.number }}
 
 ```
