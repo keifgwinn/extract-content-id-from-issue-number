@@ -2,15 +2,14 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 let octokit;
+const initOcto = () => {
+	const token = core.getInput('github-token');
+	octokit = github.getOctokit(token);
+}
 
 const extractInputs = () => {
 	const issueNum = parseInt(core.getInput('issue-number'), 10);
-	const base = core.getInput('base');
-
-	const token = core.getInput('github-token');
-	octokit = github.getOctokit(token);
-
-	return { issueNum, base };
+	return { issueNum };
 };
 
 const getIssue = async (issueNum) => {
@@ -32,7 +31,10 @@ const getIssue = async (issueNum) => {
 };
 
 const run = async () => {
-	const { issueNum, base } = extractInputs();
+	initOcto();
+
+	const { issueNum } = extractInputs();
+	
 	if (!issueNum) {
 		throw new Error('Issue number not provided');
 	}
