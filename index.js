@@ -23,12 +23,11 @@ const getIssue = async (issueNum) => {
 		};
 
 		const content = await Promise.all([
-			octokit.rest.pulls.checkIfMerged(payload).then(() => true).catch(() => false),
 			octokit.request('GET /repos/{owner}/{repo}/issues/{issue_number}', payload),
 		]);
 		return content;
 	} catch ({ message }) {
-		throw new Error(`Failed to find PR: ${message}`);
+		throw new Error(`Failed to find Issue: ${message}`);
 	}
 };
 
@@ -38,7 +37,7 @@ const run = async () => {
 		throw new Error('Issue number not provided');
 	}
 
-	const [merged, issueData] = await getIssue(issueNum);
+	const [issueData] = await getIssue(issueNum);
 
 	if ( issueData.node_id ) {
 		core.setOutput('content-id', issueData.node_id );
