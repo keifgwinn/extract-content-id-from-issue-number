@@ -5,20 +5,20 @@ let octokit;
 const initOcto = () => {
 	const token = core.getInput('github-token');
 	octokit = github.getOctokit(token);
-}
-
-const extractInputs = () => {
-	const issueNum = parseInt(core.getInput('issue-number'), 10);
-	return { issueNum };
 };
 
-const getIssue = async (issueNum) => {
+const extractInputs = () => {
+	const issueNumber = parseInt(core.getInput('issue-number'), 10);
+	return { issueNumber };
+};
+
+const getIssue = async (issueNumber) => {
 	try {
 		const { owner } = github.context.payload.repository;
 		const payload = {
 			owner: owner.name ?? owner.login,
 			repo: github.context.payload.repository.name,
-			issue_number: issueNum,
+			issue_number: issueNumber,
 		};
 
 		const content = await Promise.all([
@@ -33,18 +33,19 @@ const getIssue = async (issueNum) => {
 const run = async () => {
 	initOcto();
 
-	const { issueNum } = extractInputs();
-	
-	if (!issueNum) {
+	const { issueNumber } = extractInputs();
+
+	if (!issueNumber) {
 		throw new Error('Issue number not provided');
 	}
 
-	const [issueData] = await getIssue(issueNum);
-
-	if ( issueData.node_id ) {
-		core.setOutput('content-id', issueData.node_id );
+	const [issueData] = await getIssue(issueNumber);
+	console.log('"debugging issue data"')
+	console.log(issueData)
+	if (issueData.node_id) {
+		core.setOutput('content-id', issueData.node_id);
 	} else {
-		console.log(`${!issueData.node_id ? '' : `base is not ${base}`}. No action needed`);
+		console.log(`${!issueData.node_id ? '' : 'help?'}. No action needed`);
 	}
 };
 run().catch((err) => {
