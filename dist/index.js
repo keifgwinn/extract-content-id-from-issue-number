@@ -10263,8 +10263,8 @@ const run = async () => {
 	const [issueData] = await getIssue(issueNumber);
 	console.log('"debugging issue data"')
 	console.log(issueData)
-	if (issueData.node_id) {
-		core.setOutput('content-id', issueData.node_id);
+	if (issueData.data.node_id) {
+		core.setOutput('content-id', issueData.data.node_id);
 	} else {
 		console.log(`${!issueData.node_id ? '' : 'help?'}. No action needed`);
 	}
